@@ -9,8 +9,10 @@ from collections import Counter
 def treat_obesity(data):
     obesity = [item.lower() for item in rawData['obesity'].fillna('no')]
     for i, value in enumerate(obesity):
-        if value != 'no':
+        if value != 'no' and value != 'si':
             if value.find('obesitat') != -1:
+                obesity[i] = "si"
+            elif value == "sí":
                 obesity[i] = "si"
             else:
                 try:
@@ -24,19 +26,53 @@ def treat_obesity(data):
     return data
 
 
+def treat_sex(data):
+    data = data.drop(data[data['sex'].isna()].index)
+    data['sex'] = data['sex'].astype('int32')
+    return data
+
+
+def treat_na(data):
+    '''
+    aqesta funció tracta els nans de forma basica i converteix a int
+    '''
+
+    data["sports"] = data["sports"].fillna(1)
+    data["sports"] = data["sports"].astype('int32')
+
+    data["smokers_home"] = data["smokers_home"].fillna(-1)
+    data["smokers_home"] = data["smokers_home"].astype('int32')
+
+    '''el inclusion criteria te com 66% de nans, el podem eliminar o usar per fer una mostra de nomes surveys presencials idk'''
+    data["inclusion_criteria"] = data["inclusion_criteria"].fillna(-1)
+    data["inclusion_criteria"] = data["inclusion_criteria"].astype('int32')
+
+    data["sympt_epi"] = data["sympt_epi"].fillna(0)
+    data["sympt_epi"] = data["sympt_epi"].astype('int32')
+
+    return data
+
+
 if __name__ == '__main__':
     rawData = pd.read_csv("data/preprocessed/COPEDICATClinicSympt_DATA_2020-12-17_1642.csv", header=0, delimiter=',')
-    attributes = rawData.columns.tolist()
-    rawData = treat_obesity(rawData)
-    print(rawData['obesity'])
 
-    dropAttributes = ["id", "participant_id", "recruit_date", "postal_code", "province", "family_country",
-                      "row_school", "sports_type", "m2", "floor_level", "rooms", "persons_home",
-                      "survey_type", "cxr", "ct", "sero_date", "cxr_date", "pcr_date", "pcr_type", "antigenic_date",
-                      "discharge_date", "adm_date", "comments", "survey_end_date"]
+    attributes = rawData.columns.tolist()
+    attributes_first = [item for item in attributes if item.find("_first") != -1]
+
+    dropAttributes = ["id", "bus", "participant_id", "recruit_date", "postal_code", "province", "family_country",
+              "row_school", "sports_type", "m2", "floor_level", "rooms","persons_home",
+              "survey_type", "cxr", "ct", "sero_date", "cxr_date", "pcr_date", "pcr_type", "antigenic_date",
+              "discharge_date", "adm_date", "comments", "survey_end_date"] + attributes_first
 
     rawData = rawData.drop(dropAttributes, axis=1)
 
+    rawData = treat_obesity(rawData)
+    rawData = treat_sex(rawData)
+    rawData = treat_na(rawData)
+
+
+
+print(rawData.columns.tolist())
     # TODO modificar els housemember symptoms
     # TODO simptomatology_date
     # TODO eliminar els first?
