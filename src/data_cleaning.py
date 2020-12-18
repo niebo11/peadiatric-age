@@ -8,7 +8,18 @@ from collections import Counter
 # This function cleans the column obesity, for each NaN value is changed for "no" otherwise is changed to "yes"
 def treat_obesity(data):
     obesity = [item.lower() for item in rawData['obesity'].fillna('no')]
-    obesity = ["si" if item != "no" else item for item in obesity]
+    for i, value in enumerate(obesity):
+        if value != 'no':
+            if value.find('obesitat') != -1:
+                obesity[i] = "si"
+            else:
+                try:
+                    if float(value) >= 30:
+                        obesity[i] = "si"
+                    else:
+                        obesity[i] = "no"
+                except ValueError:
+                    obesity[i] = "no"
     data['obesity'] = obesity
     return data
 
@@ -17,6 +28,7 @@ if __name__ == '__main__':
     rawData = pd.read_csv("data/preprocessed/COPEDICATClinicSympt_DATA_2020-12-17_1642.csv", header=0, delimiter=',')
     attributes = rawData.columns.tolist()
     rawData = treat_obesity(rawData)
+    print(rawData['obesity'])
 
     dropAttributes = ["id", "participant_id", "recruit_date", "postal_code", "province", "family_country",
                       "row_school", "sports_type", "m2", "floor_level", "rooms", "persons_home",
