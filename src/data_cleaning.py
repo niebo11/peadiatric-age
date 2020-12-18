@@ -9,7 +9,7 @@ from collections import Counter
 def treat_obesity(data):
     obesity = [item.lower() for item in rawData['obesity'].fillna('no')]
     for i, value in enumerate(obesity):
-        if value != 'no' and value != 'si':
+        if value != 'no':
             if value.find('obesitat') != -1:
                 obesity[i] = "si"
             elif value == "sí":
@@ -23,6 +23,16 @@ def treat_obesity(data):
                 except ValueError:
                     obesity[i] = "no"
     data['obesity'] = obesity
+    return data
+
+
+def treat_first(data, attr_f, A):
+    for attr in attr_f:
+        i = data.columns.get_loc(attr)
+        data[A[i-1]] = data[A[i-1]].fillna(3)
+        if data[A[i-1]].min() == 0:
+            data.loc[data[A[i-1]] == 0, A[i-1]] = 2
+        data.loc[data[A[i]] == 1, A[i-1]] = 0
     return data
 
 
@@ -55,9 +65,10 @@ def treat_na(data):
 
 if __name__ == '__main__':
     rawData = pd.read_csv("data/preprocessed/COPEDICATClinicSympt_DATA_2020-12-17_1642.csv", header=0, delimiter=',')
-
     attributes = rawData.columns.tolist()
     attributes_first = [item for item in attributes if item.find("_first") != -1]
+    rawData = treat_obesity(rawData)
+    rawData = treat_first(rawData, attributes_first, attributes)
 
     dropAttributes = ["id", "bus", "participant_id", "recruit_date", "postal_code", "province", "family_country",
               "row_school", "sports_type", "m2", "floor_level", "rooms","persons_home",
@@ -69,7 +80,6 @@ if __name__ == '__main__':
     rawData = treat_obesity(rawData)
     rawData = treat_sex(rawData)
     rawData = treat_na(rawData)
-
 
 
 print(rawData.columns.tolist())
