@@ -31,7 +31,7 @@ def treat_first(data, attr_f, A):
         i = data.columns.get_loc(attr)
         data[A[i-1]] = data[A[i-1]].fillna(3)
         if data[A[i-1]].min() == 0:
-            data.loc[data[A[i-1]] == 0, A[i-1]] = 2
+            data.loc[data[A[i-1]] == 1, A[i-1]] = 2
         data.loc[data[A[i]] == 1, A[i-1]] = 0
     return data
 
