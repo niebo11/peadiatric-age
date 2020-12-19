@@ -244,7 +244,7 @@ if __name__ == '__main__':
     rawData_nCB = rawData_nCB[(rawData_nCB.pcr_performed != 0) | (rawData_nCB.antigenic_performed != 0)]
 
     dropAttributes2 = ['pcr_performed', 'pcr_result', 'antigenic_performed', 'antigenic_result']
-    rawData_nCB = nCB_data.drop(dropAttributes2, axis=1)
+    rawData_nCB = rawData_nCB.drop(dropAttributes2, axis=1)
 
 
     rawData_CB = treat_disease(diseases, rawData)
@@ -256,3 +256,4 @@ if __name__ == '__main__':
 
     rawData_CB.to_csv('data/processed/data1.csv', date_format = '%B %d, %Y')
     rawData_nCB.to_csv('data/processed/data_nBC.csv', date_format = '%B %d, %Y')
+
