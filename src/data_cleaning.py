@@ -6,7 +6,7 @@ from collections import Counter
 
 
 def treat_disease(disease, data):
-    disease = disease[1:-1]
+    disease = disease[0:-1]
     for index, item in enumerate(disease):
         if item.find("1") != -1:
             name = item.replace("___1", "")
@@ -115,7 +115,7 @@ def treat_na_int(data):
 
 
 if __name__ == '__main__':
-    rawData = pd.read_excel("data/preprocessed/COPEDICATClinicSympt_DATA_2020-12-19_0932.csv", header=0, delimiter=',')
+    rawData = pd.read_csv("data/preprocessed/COPEDICATClinicSympt_DATA_2020-12-17_1642.csv", header=0, delimiter=',')
 
     rawData = treat_sex(rawData)
     rawData = treat_symptoms_binary(rawData)
@@ -132,7 +132,8 @@ if __name__ == '__main__':
               "survey_type", "cxr", "ct", "sero_date", "cxr_date", "pcr_date", "pcr_type", "antigenic_date",
               "discharge_date", "adm_date", "comments", "survey_end_date", "housemember_symptoms___2",
               "housemember_symptoms___3", "housemember_symptoms___4", "housemember_symptoms___5",
-              "housemember_symptoms___1", "school_symptoms_member___4", "school_symptoms_member___5"] + attributes_first
+              "housemember_symptoms___1", "school_symptoms_member___4", "school_symptoms_member___5",
+              "name_initials_of_the_inter"] + attributes_first
 
     # No comorbi_binary
     nCB_data = rawData[rawData.comorbi_binary == 0]
@@ -146,14 +147,16 @@ if __name__ == '__main__':
                 'kawasaki___1', 'kawasaki___2', 'kawasaki___3', 'inflammation___1', 'inflammation___2',
                 'inflammation___3', 'vih_others___1', 'vih_others___2', 'vih_others___3', 'comorbidities_complete']
 
-    rawData_nBC = nCB_data.drop(dropAttributes + diseases, axis=1)
+    # comorbidities_complete unverified remove and incomplete try to complete
+    rawData_nCB = nCB_data.drop(dropAttributes + diseases, axis=1)
 
-    rawData = treat_disease(diseases, rawData)
+    rawData_CB = treat_disease(diseases, rawData)
+    rawData_CB = rawData_CB[rawData_CB.comorbi_binary == 1]
 
-    rawData = rawData.drop(dropAttributes, axis=1)
+    rawData_CB = rawData_CB.drop(dropAttributes, axis=1)
 
-    rawData.to_csv('data/processed/data1.csv', date_format = '%B %d, %Y')
-    rawData_nBC.to_csv('data/processed/data_nBC.csv', date_format = '%B %d, %Y')
+    rawData_CB.to_csv('data/processed/data1.csv', date_format = '%B %d, %Y')
+    rawData_nCB.to_csv('data/processed/data_nBC.csv', date_format = '%B %d, %Y')
 
 
 #print(rawData.columns.tolist())
