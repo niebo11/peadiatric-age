@@ -21,7 +21,7 @@ def treat_disease(disease, data):
 def treat_obesity(data):
     obesity = [item.lower() for item in rawData['obesity'].fillna('no')]
     for i, value in enumerate(obesity):
-        if value != 'no' and value != 'si':
+        if value != 0 and value != 'si':
             if value.find('obesitat') != -1:
                 obesity[i] = "si"
             elif value == "sí":
@@ -113,6 +113,16 @@ def treat_na_int(data):
 
     return data
 
+def treat_covid(data):
+
+
+    data["pcr_result"] = data["pcr_result"].fillna(0)
+    data["pcr_result"] = data["pcr_result"].astype('int32')
+
+    data["antigenic_result"] = data["antigenic_result"].fillna(0)
+    data["antigenic_result"] = data["antigenic_result"].astype('int32')
+
+    return data
 
 if __name__ == '__main__':
     rawData = pd.read_csv("data/preprocessed/COPEDICATClinicSympt_DATA_2020-12-17_1642.csv", header=0, delimiter=',')
@@ -121,6 +131,7 @@ if __name__ == '__main__':
     rawData = treat_symptoms_binary(rawData)
     rawData = treat_na_int(rawData)
     rawData = treat_school_symptoms(rawData)
+    rawData = treat_covid(rawData)
 
     attributes = rawData.columns.tolist()
     attributes_first = [item for item in attributes if item.find("_first") != -1]
@@ -149,11 +160,13 @@ if __name__ == '__main__':
 
     # comorbidities_complete unverified remove and incomplete try to complete
     rawData_nCB = nCB_data.drop(dropAttributes + diseases, axis=1)
+    rawData_nCB = rawData_nCB[(rawData_nCB.pcr_performed != 0) & (rawData_nCB.antigenic_performed != 0)]
 
     rawData_CB = treat_disease(diseases, rawData)
     rawData_CB = rawData_CB[rawData_CB.comorbi_binary == 1]
 
     rawData_CB = rawData_CB.drop(dropAttributes, axis=1)
+
 
     rawData_CB.to_csv('data/processed/data1.csv', date_format = '%B %d, %Y')
     rawData_nCB.to_csv('data/processed/data_nBC.csv', date_format = '%B %d, %Y')
@@ -161,4 +174,5 @@ if __name__ == '__main__':
 
 #print(rawData.columns.tolist())
     # TODO simptomatology_date
-    # TODO comorbi_binary
+    # TODO fever, symptoms, drop dates, school
+
