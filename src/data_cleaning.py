@@ -125,6 +125,5 @@ if __name__ == '__main__':
 
 
 print(rawData.columns.tolist())
-    # TODO modificar els housemember symptoms
     # TODO simptomatology_date
-    # TODO eliminar els first?
+    # TODO comorbi_binary
