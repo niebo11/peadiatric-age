@@ -115,7 +115,7 @@ def treat_na_int(data):
 
 
 if __name__ == '__main__':
-    rawData = pd.read_csv("data/preprocessed/COPEDICATClinicSympt_DATA_2020-12-17_1642.csv", header=0, delimiter=',')
+    rawData = pd.read_excel("data/preprocessed/COPEDICATClinicSympt_DATA_2020-12-19_0932.csv", header=0, delimiter=',')
 
     rawData = treat_sex(rawData)
     rawData = treat_symptoms_binary(rawData)
