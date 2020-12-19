@@ -9,7 +9,7 @@ data = pd.read_csv("data/processed/data_BC.csv", header=0, delimiter=',')
 
 # Suposarem que la primera columna es el covid result
 # camps a omplir
-X_train, X_test, y_train, y_test = train_test_split(data.loc[:, 'omplir segona columna'], data.covid_result,
+X_train, X_test, y_train, y_test = train_test_split(data.loc[:, 'omplir segona columna'], data.covid,
                                                     test_size=0.33)
 
 sizes = [2*i for i in range(1, 25)]
