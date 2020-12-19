@@ -1,10 +1,12 @@
 import numpy as np
 import pandas as pd
+
 from sklearn.metrics import accuracy_score, confusion_matrix
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import GridSearchCV
 from sklearn.neural_network import MLPClassifier
 import pickle
+
 
 def confusion(true, pred, classes):
     cm = pd.DataFrame(confusion_matrix(true, pred), index = classes, columns = classes)
@@ -27,6 +29,7 @@ X_train, X_test, y_train, y_test = train_test_split(data.loc[:, 'sex':], data.co
 
 sizes = [2*i for i in range(1, 25)]
 
+
 decays = [10**i for i in np.arange(-3, 0, 0.05)]
 
 model_net = MLPClassifier(alpha=0, activation='logistic', max_iter=500, solver='lbfgs')
@@ -35,6 +38,7 @@ trc = GridSearchCV(estimator=model_net, param_grid={'hidden_layer_sizes': sizes}
                    cv=10, return_train_score=True)
 
 model_10CV = trc.fit(X_train, y_train)
+
 
 hidden_layer_size = model_10CV.best_params_['hidden_layer_sizes']
 
