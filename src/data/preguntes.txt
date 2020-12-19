@@ -1,0 +1,51 @@
+sex?
+do you practice sports regularly?
+Does anyone at home smoke?
+**provar predictor sense el inclusion criteria** assignar -1
+Anyone at home with suspected COVID-19 symptoms?
+Anyone at School had COVID-19 symptoms?
+Anyone at School with confirmed COVID-19?
+Do you present COVID-19 symptoms? **si es qe sí, preguntar els següents, si no, posar qe no a tots**
+Which of these symptoms do you present?
+    Fever
+    Cough
+    Croupy cough
+    Dysphonia / aphony
+    Shortness of breath or work of breathing
+    Tachypnea / polypnea
+    Respiratory auscultation **si es que si preguntar tbe el següent, si no assignar no**
+        Wheezing(sibilants)
+        Crackles
+    Odynophagia
+    Nasal congestion
+    Fatigue / Malaise
+    Headache
+    Conjuntivitis
+    Retro-ocular pain
+    Gastrointestinal symptoms **si es que si preguntar tbe el següent, si no assignar no**
+        Abdominal pain
+        Vomiting/nausees
+        Diarrhoea
+    Skin signs / symptoms
+        Skin Rash
+        Inflammatory peripherical signs
+    Lymphadenopathies (>1cm)
+    Hepatomegaly
+    Splenomegaly
+    Hemorrhagies
+    Irritability
+    Neurologic manifestations **si es que si preguntar tbe el següent, si no assignar no**
+        Seizures (convulsions)
+        Hypotonia / flaccidity
+    Shock signs
+    Alteration in taste
+    Alteration in smell
+    Have you taken any antigenic test for other respiratory viruses? **si es que si preguntar tbe el següent, si no assignar desconagut(3)**
+        Antigenic test for RSV (VRS) result
+        Antigenic test for INFLUENZA A result
+        Antigenic test for INFLUENZA B result
+    Do you have any bacterial infection?
+    Do you have comorbidities?
+    Do you have obesity (IMC>p30)? R(1/0)
+    Seasonal Flu vaccine administered? R(1/0)
+    Routine vaccines up to date? R(1/0)
