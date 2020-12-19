@@ -240,15 +240,13 @@ if __name__ == '__main__':
                 'inflammation___3', 'vih_others___1', 'vih_others___2', 'vih_others___3']
 
     # comorbidities_complete unverified remove and incomplete try to complete
-    rawData_nCB = nCB_data.drop(dropAttributes + diseases, axis=1)
-    rawData_nCB = rawData_nCB[(rawData_nCB.pcr_performed != 0) | (rawData_nCB.antigenic_performed != 0)]
 
     dropAttributes2 = ['pcr_performed', 'pcr_result', 'antigenic_performed', 'antigenic_result']
     rawData_nCB = nCB_data.drop(dropAttributes2, axis=1)
 
 
     rawData_CB = treat_disease(diseases, rawData)
-    rawData_CB = rawData_CB[rawData_CB.comorbi_binary == 1]
+    rawData_CB = rawData_CB[(rawData_CB.antigenic_performed != 0) & (rawData_CB.pcr_performed != 0)]
 
 
     rawData_CB = rawData_CB.drop(dropAttributes + dropAttributes2, axis=1)
