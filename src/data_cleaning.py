@@ -5,6 +5,18 @@ import pandas as pd
 from collections import Counter
 
 
+def treat_disease(disease, data):
+    disease = disease[1:-1]
+    for index, item in enumerate(disease):
+        if item.find("1") != -1:
+            name = item.replace("___1", "")
+            data[name] = data[item]
+            data.loc[data[disease[index+1]] == 1, name] = 2
+            data.loc[data[disease[index+2]] == 2, name] = 3
+            data = data.drop([item, disease[index+1], disease[index+2]], axis=1)
+    return data
+
+
 # This function cleans the column obesity, for each NaN value is changed for "no" otherwise is changed to "yes"
 def treat_obesity(data):
     obesity = [item.lower() for item in rawData['obesity'].fillna('no')]
@@ -40,6 +52,7 @@ def treat_sex(data):
     data = data.drop(data[data['sex'].isna()].index)
     data['sex'] = data['sex'].astype('int32')
     return data
+
 
 def treat_symptoms_binary(data):
     data = data.drop(data[data['symptoms_binary'].isna()].index)
@@ -121,9 +134,28 @@ if __name__ == '__main__':
               "housemember_symptoms___3", "housemember_symptoms___4", "housemember_symptoms___5",
               "housemember_symptoms___1", "school_symptoms_member___4", "school_symptoms_member___5"] + attributes_first
 
+    # No comorbi_binary
+    nCB_data = rawData[rawData.comorbi_binary == 0]
+
+    diseases = ['comorbi_binary', 'cardiopathy___1', 'cardiopathy___2', 'cardiopathy___3', 'hypertension___1',
+                'hypertension___2', 'hypertension___3', 'pulmonar_disease___1', 'pulmonar_disease___2',
+                'pulmonar_disease___3', 'asma___1', 'asma___2', 'asma___3', 'nephrology___1', 'nephrology___2',
+                'nephrology___3', 'hepatic___1', 'hepatic___2', 'hepatic___3', 'neurologic___1', 'neurologic___2',
+                'neurologic___3', 'diabetes___1', 'diabetes___2', 'diabetes___3', 'tuberculosi___1', 'tuberculosi___2',
+                'tuberculosi___3', 'idp___1', 'idp___2', 'idp___3', 'neoplasia___1', 'neoplasia___2', 'neoplasia___3',
+                'kawasaki___1', 'kawasaki___2', 'kawasaki___3', 'inflammation___1', 'inflammation___2',
+                'inflammation___3', 'vih_others___1', 'vih_others___2', 'vih_others___3', 'comorbidities_complete']
+
+    rawData_nBC = nCB_data.drop(dropAttributes + diseases, axis=1)
+
+    rawData = treat_disease(diseases, rawData)
+
     rawData = rawData.drop(dropAttributes, axis=1)
 
+    rawData.to_csv('data/processed/data1.csv', date_format = '%B %d, %Y')
+    rawData_nBC.to_csv('data/processed/data_nBC.csv', date_format = '%B %d, %Y')
 
-print(rawData.columns.tolist())
+
+#print(rawData.columns.tolist())
     # TODO simptomatology_date
     # TODO comorbi_binary
