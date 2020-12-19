@@ -1,4 +1,7 @@
 # Peadiatric age
 ## Authors:
-- Niebo Zhang 
+- Joan Muntaner
+- Jun Wang
 - Aleix Sarroca
+- Grace Chen
+- Niebo Zhang
