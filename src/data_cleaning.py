@@ -122,6 +122,19 @@ def treat_covid(data):
     data["antigenic_result"] = data["antigenic_result"].fillna(0)
     data["antigenic_result"] = data["antigenic_result"].astype('int32')
 
+    covid = []
+    pcr_result = [item for item in data["pcr_result"]]
+    ant_result = [item for item in data["antigenic_result"]]
+    for i in range(len(data["pcr_result"].tolist())):
+        if pcr_result[i] == 1:
+            covid[i] = 1
+        elif ant_result[i] == 1 and pcr_result[i] == 0:
+            covid[i] = 1
+        else:
+            covid[i] = 0
+
+    data["covid"] = covid
+
     return data
 
 if __name__ == '__main__':
@@ -144,7 +157,8 @@ if __name__ == '__main__':
               "discharge_date", "adm_date", "comments", "survey_end_date", "housemember_symptoms___2",
               "housemember_symptoms___3", "housemember_symptoms___4", "housemember_symptoms___5",
               "housemember_symptoms___1", "school_symptoms_member___4", "school_symptoms_member___5",
-              "name_initials_of_the_inter"] + attributes_first
+              "name_initials_of_the_inter", "otherviruses_date", "simptomatology_date", "date_fever", "symptomatology_date",
+              "thoracic_ct_date", "adm_date", "discharge_date", "flu_date", "survey_end_date"] + attributes_first
 
     # No comorbi_binary
     nCB_data = rawData[rawData.comorbi_binary == 0]
@@ -173,6 +187,5 @@ if __name__ == '__main__':
 
 
 #print(rawData.columns.tolist())
-    # TODO simptomatology_date
-    # TODO fever, symptoms, drop dates, school
+    # TODO fever, symptoms
 
