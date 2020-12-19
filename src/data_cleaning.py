@@ -6,7 +6,6 @@ from collections import Counter
 
 
 def treat_disease(disease, data):
-    disease = disease[0:-1]
     for index, item in enumerate(disease):
         if item.find("1") != -1:
             name = item.replace("___1", "")
@@ -21,19 +20,24 @@ def treat_disease(disease, data):
 def treat_obesity(data):
     obesity = [item.lower() for item in rawData['obesity'].fillna('no')]
     for i, value in enumerate(obesity):
-        if value != 0 and value != 'si':
+        if  value != 'si':
+
             if value.find('obesitat') != -1:
-                obesity[i] = "si"
+                obesity[i] = 0
             elif value == "sí":
-                obesity[i] = "si"
+                obesity[i] = 0
+            elif value == "no":
+                obesity[i] = 1
             else:
                 try:
                     if float(value) >= 30:
-                        obesity[i] = "si"
+                        obesity[i] = 0
                     else:
-                        obesity[i] = "no"
+                        obesity[i] = 1
                 except ValueError:
-                    obesity[i] = "no"
+                    obesity[i] = 1
+        else:
+            obesity[i] = 0
     data['obesity'] = obesity
     return data
 
@@ -195,7 +199,7 @@ if __name__ == '__main__':
     rawData = treat_covid(rawData)
     rawData = treat_coviral(rawData)
 
-    viruses = ['vrs_result', 'adeno_result', 'flu_a_result', 'flu_b_result']
+    viruses = ['vrs_result', 'flu_a_result', 'flu_b_result']
     rawData = treat_virus(rawData, viruses)
 
     attributes = rawData.columns.tolist()
@@ -217,42 +221,45 @@ if __name__ == '__main__':
         'adm_hospital','picu_adm','final_diagnosis_text','final_diagnosis_code','final_outcome','other_viruses_text',
         'clinical_and_diagnosis_data_at_the_admission_time_complete', 'other', 'final_classification_of_th',
         'final_outcome_complete','ag_test_mark', 'bacterial_type', 'coviral_type', 'coviral_binary', 'antigenic_sample',
-        ] + attributes_first
+        "inflam_periferic","inflam_oral","confusion", 'nuchal_stiffness', 'peripheral_paralysis', 'adeno_result',
+        'comorbidities_complete'] + attributes_first
 
     symptomsDesc = ['fever', 'tos', 'crup', 'dysphonia', 'resp', 'tachypnea', 'wheezing', 'crackles',
                 'odynophagia', 'nasal_congestion', 'fatiga', 'headache', 'conjuntivitis', 'ocular_pain', 'gi_symptoms',
                 'abdominal_pain', 'vomiting', 'dyarrea', 'adenopathies', 'hepato', 'splenomegaly', 'hemorrhagies',
                 'irritability', 'shock', 'taste_smell', 'smell']
 
-    symptomsYN = ['gi_symptoms', 'ausc_resp', 'dermatologic', 'rash', 'inflam_periferic', 'inflam_oral', 'neuro',
-                'confusion', 'seizures', 'nuchal_stiffness', 'hypotonia', 'peripheral_paralysis']
+    symptomsYN = ['gi_symptoms', 'ausc_resp', 'dermatologic', 'rash', 'neuro'
+        , 'seizures', 'hypotonia']
 
     rawData = treat_symptoms(rawData, symptomsDesc, symptomsYN)
 
     # No comorbi_binary
     nCB_data = rawData[rawData.comorbi_binary == 0]
 
-    diseases = ['comorbi_binary', 'cardiopathy___1', 'cardiopathy___2', 'cardiopathy___3', 'hypertension___1',
+    diseases = [ 'cardiopathy___1', 'cardiopathy___2', 'cardiopathy___3', 'hypertension___1',
                 'hypertension___2', 'hypertension___3', 'pulmonar_disease___1', 'pulmonar_disease___2',
                 'pulmonar_disease___3', 'asma___1', 'asma___2', 'asma___3', 'nephrology___1', 'nephrology___2',
                 'nephrology___3', 'hepatic___1', 'hepatic___2', 'hepatic___3', 'neurologic___1', 'neurologic___2',
                 'neurologic___3', 'diabetes___1', 'diabetes___2', 'diabetes___3', 'tuberculosi___1', 'tuberculosi___2',
                 'tuberculosi___3', 'idp___1', 'idp___2', 'idp___3', 'neoplasia___1', 'neoplasia___2', 'neoplasia___3',
                 'kawasaki___1', 'kawasaki___2', 'kawasaki___3', 'inflammation___1', 'inflammation___2',
-                'inflammation___3', 'vih_others___1', 'vih_others___2', 'vih_others___3', 'comorbidities_complete']
+                'inflammation___3', 'vih_others___1', 'vih_others___2', 'vih_others___3']
 
 
     # comorbidities_complete unverified remove and incomplete try to complete
     rawData_nCB = nCB_data.drop(dropAttributes + diseases, axis=1)
     rawData_nCB = rawData_nCB[(rawData_nCB.pcr_performed != 0) | (rawData_nCB.antigenic_performed != 0)]
-    print(rawData_nCB.columns.tolist())
-    print(rawData_nCB.shape)
+
+    dropAttributes2 = ['pcr_performed', 'pcr_result', 'antigenic_performed', 'antigenic_result']
+    rawData_nCB = nCB_data.drop(dropAttributes2, axis=1)
+
 
     rawData_CB = treat_disease(diseases, rawData)
     rawData_CB = rawData_CB[rawData_CB.comorbi_binary == 1]
 
 
-    rawData_CB = rawData_CB.drop(dropAttributes, axis=1)
+    rawData_CB = rawData_CB.drop(dropAttributes + dropAttributes2, axis=1)
 
 
     rawData_CB.to_csv('data/processed/data1.csv', date_format = '%B %d, %Y')
