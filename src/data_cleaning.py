@@ -159,17 +159,17 @@ if __name__ == '__main__':
                 'inflammation___3', 'vih_others___1', 'vih_others___2', 'vih_others___3', 'comorbidities_complete']
 
     # comorbidities_complete unverified remove and incomplete try to complete
-    rawData_nCB = nCB_data.drop(dropAttributes + diseases, axis=1)
+    rawData_nBC = nCB_data.drop(dropAttributes + diseases, axis=1)
     rawData_nCB = rawData_nCB[(rawData_nCB.pcr_performed != 0) & (rawData_nCB.antigenic_performed != 0)]
 
     rawData_CB = treat_disease(diseases, rawData)
-    rawData_CB = rawData_CB[rawData_CB.comorbi_binary == 1]
+    rawData_CB = rawData_CB[(rawData_CB.antigenic_performed != 0) & (rawData_CB.pcr_performed != 0)]
 
     rawData_CB = rawData_CB.drop(dropAttributes, axis=1)
 
 
     rawData_CB.to_csv('data/processed/data1.csv', date_format = '%B %d, %Y')
-    rawData_nCB.to_csv('data/processed/data_nBC.csv', date_format = '%B %d, %Y')
+    rawData_nBC.to_csv('data/processed/data_nBC.csv', date_format = '%B %d, %Y')
 
 
 #print(rawData.columns.tolist())
