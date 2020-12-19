@@ -90,7 +90,6 @@ def treat_school_symptoms(data):
 def treat_na_int(data):
     # aqesta funció tracta els nans de forma basica i converteix a int
 
-
     data["sports"] = data["sports"].fillna(1)
     data["sports"] = data["sports"].astype('int32')
 
@@ -215,7 +214,7 @@ if __name__ == '__main__':
         'clinical_and_diagnosis_data_at_the_admission_time_complete', 'other', 'final_classification_of_th',
         'final_outcome_complete','ag_test_mark', 'bacterial_type', 'coviral_type', 'coviral_binary', 'antigenic_sample',
         "inflam_periferic","inflam_oral","confusion", 'nuchal_stiffness', 'peripheral_paralysis', 'adeno_result',
-        'comorbidities_complete'] + attributes_first
+        'comorbidities_complete', 'comorbi_binary'] + attributes_first
 
     symptomsDesc = ['fever', 'tos', 'crup', 'dysphonia', 'resp', 'tachypnea', 'wheezing', 'crackles',
                 'odynophagia', 'nasal_congestion', 'fatiga', 'headache', 'conjuntivitis', 'ocular_pain', 'gi_symptoms',
