@@ -9,7 +9,7 @@ from collections import Counter
 def treat_obesity(data):
     obesity = [item.lower() for item in rawData['obesity'].fillna('no')]
     for i, value in enumerate(obesity):
-        if value != 'no':
+        if value != 'no' and value != 'si':
             if value.find('obesitat') != -1:
                 obesity[i] = "si"
             elif value == "sí":
@@ -41,8 +41,40 @@ def treat_sex(data):
     data['sex'] = data['sex'].astype('int32')
     return data
 
+def treat_symptoms_binary(data):
+    data = data.drop(data[data['symptoms_binary'].isna()].index)
+    data['symptoms_binary'] = data['symptoms_binary'].astype('int32')
+    return data
 
-def treat_na(data):
+
+def treat_housemember_symptoms(data):
+    data["housemember_symptoms___1"] = data["housemember_symptoms___1"].fillna(0)
+    data["housemember_symptoms___1"] = data["housemember_symptoms___1"].astype('int32')
+    data["housemember_symptoms___2"] = data["housemember_symptoms___2"].fillna(0)
+    data["housemember_symptoms___2"] = data["housemember_symptoms___2"].astype('int32')
+    data["housemember_symptoms___3"] = data["housemember_symptoms___3"].fillna(0)
+    data["housemember_symptoms___3"] = data["housemember_symptoms___3"].astype('int32')
+    data["housemember_symptoms___4"] = data["housemember_symptoms___4"].fillna(0)
+    data["housemember_symptoms___4"] = data["housemember_symptoms___4"].astype('int32')
+    data["housemember_symptoms___5"] = data["housemember_symptoms___5"].fillna(0)
+    data["housemember_symptoms___5"] = data["housemember_symptoms___5"].astype('int32')
+
+    data["housemember_symptoms"] = data["housemember_symptoms___1"] + data["housemember_symptoms___2"] + data["housemember_symptoms___3"] + data["housemember_symptoms___4"] + data["housemember_symptoms___5"]
+
+    return data
+
+
+def treat_school_symptoms(data):
+    data["school_symptoms_member___1"] = data["school_symptoms_member___1"].fillna(0)
+    data["school_symptoms_member___1"] = data["school_symptoms_member___1"].astype('int32')
+    data["school_symptoms_member___2"] = data["school_symptoms_member___2"].fillna(0)
+    data["school_symptoms_member___2"] = data["school_symptoms_member___2"].astype('int32')
+
+    return data
+
+
+
+def treat_na_int(data):
     '''
     aqesta funció tracta els nans de forma basica i converteix a int
     '''
@@ -53,18 +85,30 @@ def treat_na(data):
     data["smokers_home"] = data["smokers_home"].fillna(-1)
     data["smokers_home"] = data["smokers_home"].astype('int32')
 
-    '''el inclusion criteria te com 66% de nans, el podem eliminar o usar per fer una mostra de nomes surveys presencials idk'''
     data["inclusion_criteria"] = data["inclusion_criteria"].fillna(-1)
     data["inclusion_criteria"] = data["inclusion_criteria"].astype('int32')
 
     data["sympt_epi"] = data["sympt_epi"].fillna(0)
     data["sympt_epi"] = data["sympt_epi"].astype('int32')
 
+    data["school_confirmed"] = data["school_confirmed"].fillna(0)
+    data["school_confirmed"] = data["school_confirmed"].astype('int32')
+
+    # for columna in [item for item in data.columns.tolist() if data[item].dtype == "float64"]:
+    #     data[columna] = data[columna].fillna(-1)
+    #     data[columna] = data[columna].astype('int32')
+
     return data
 
 
 if __name__ == '__main__':
     rawData = pd.read_csv("data/preprocessed/COPEDICATClinicSympt_DATA_2020-12-17_1642.csv", header=0, delimiter=',')
+
+    rawData = treat_sex(rawData)
+    rawData = treat_symptoms_binary(rawData)
+    rawData = treat_na_int(rawData)
+    rawData = treat_school_symptoms(rawData)
+
     attributes = rawData.columns.tolist()
     attributes_first = [item for item in attributes if item.find("_first") != -1]
     rawData = treat_obesity(rawData)
@@ -73,13 +117,11 @@ if __name__ == '__main__':
     dropAttributes = ["id", "bus", "participant_id", "recruit_date", "postal_code", "province", "family_country",
               "row_school", "sports_type", "m2", "floor_level", "rooms","persons_home",
               "survey_type", "cxr", "ct", "sero_date", "cxr_date", "pcr_date", "pcr_type", "antigenic_date",
-              "discharge_date", "adm_date", "comments", "survey_end_date"] + attributes_first
+              "discharge_date", "adm_date", "comments", "survey_end_date", "housemember_symptoms___2",
+              "housemember_symptoms___3", "housemember_symptoms___4", "housemember_symptoms___5",
+              "housemember_symptoms___1", "school_symptoms_member___4", "school_symptoms_member___5"] + attributes_first
 
     rawData = rawData.drop(dropAttributes, axis=1)
-
-    rawData = treat_obesity(rawData)
-    rawData = treat_sex(rawData)
-    rawData = treat_na(rawData)
 
 
 print(rawData.columns.tolist())
