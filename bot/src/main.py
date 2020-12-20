@@ -9,6 +9,16 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 
 bot = commands.Bot(command_prefix='!')
 
+data = {'sex': 1, 'sports': 2, 'smokers_home': 2, 'inclusion_criteria': 2, 'sympt_epi': 1,
+        'school_symptoms_member___1' : 1, 'school_symptoms_member___2': 1, 'school_confirmed': 1,
+        'symptoms_binary': 1, 'fever': 2, 'tos': 2, 'crup':2, 'dysphonia':2, 'resp':2, 'tachypnea':2,
+        'ausc_resp':2, 'wheezing':2, 'crackles':2, 'odynophagia':2, 'nasal_congestion':2,
+        'fatiga':2, 'headache':2, 'conjuntivitis':2, 'ocular_pain':2, 'gi_symptoms':1, 'abdominal_pain':2,
+        'vomiting': 2, 'dyarrea':2, 'dermatologic':1, 'rash':1, 'adenopathies':2, 'hepato':2, 'splenomegaly':2,
+        'hemorrhagies':2, 'irritability':2, 'neuro':1, 'seizures':1, 'hypotonia':1, 'shock':1,
+        'taste_smell':1, 'smell':1, 'vrs_result':2, 'flu_a_result':2, 'flu_b_result':2,
+        'bacterial_infection':2, 'obesity': 1, 'flu_binary': 1, 'vaccines_binary': 1}
+
 actual_talking = ""
 
 symptoms = {'Fever': 'fever', 'Cough': 'tos', 'Croupy cough': 'crup', 'Dysphonia/aphony': 'dysphonia',
@@ -33,17 +43,6 @@ neurologic_symptoms = {'Seizures': 'seizures', 'Hypotonia/flaccidity': 'hypotoni
 extra_symptoms = {'Respiratory ausculation': respiratory_symptoms,
                   'Gastrointestinal symptoms': grastrointestinal_symptoms,
                   'Neurologic manifestations': neurologic_symptoms}
-
-data = pd.DataFrame(columns = ['sex', 'sports', 'smokers_home', 'inclusion_criteria', 'sympt_epi',
-                               'school_symptoms_member_1', 'school_symptoms_member_2', 'school_confirmed',
-                               'symptoms_binary', 'fever', 'tos', 'crup', 'dysphonia', 'resp', 'tachypnea',
-                               'ausc_resp', 'wheezing', 'crackles', 'odynophagia', 'nasal_congestion',
-                               'fatiga', 'headache', 'conjuntivitis', 'ocular_pain', 'gi_symptoms', 'abdominal_pain',
-                               'vomiting', 'dyarrea', 'dermatologic', 'rash', 'adenopathies', 'hepato', 'splenomegaly',
-                               'hemorrhagies', 'irritability', 'neuro', 'seizures', 'hypotonia', 'shock',
-                               'taste_smell', 'smell', 'vrs_result', 'flu_a_result', 'flu_b_result',
-                               'bacterial_infection', 'comorbi_binary', 'obesity', 'flu_binary', 'vaccines_binary',
-                               'coviral'])
 
 @bot.command("me", help="Description of the bot")
 async def me(ctx):
@@ -73,6 +72,7 @@ async def me(ctx):
 
 @bot.command("covid", help='Nothing Yet')
 async def covid_predict(ctx):
+    print(data)
     actual_talking = ctx.author
     await ctx.send('Now I am going to ask you a few questions and I would try to predict if you are ill :c.\n'
                    'I am not scientifically accurate so If you don\'t feel well, please go to your nearest hospital '
