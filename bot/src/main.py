@@ -74,9 +74,10 @@ async def me(ctx):
 @bot.command("covid", help='Nothing Yet')
 async def covid_predict(ctx):
     actual_talking = ctx.author
-    await ctx.send('Now I am going to ask you a few questions and I would try to predict if you are ill :c.\n'
-                   'I am not scientifically accurate so If you don\'t feel well, please go to your nearest hospital '
-                   'as soon as possible.\n Please answer with 👍 or 👎 reaction, thanks for your collaboration.')
+    tmpt = 'Now I am going to ask you a few questions and I would try to predict if you are ill :c.\n I am not ' \
+           'scientifically accurate so If you don\'t feel well, please go to your nearest hospital as soon as possible.' \
+           '\n Please answer with 👍 or 👎 reaction, thanks for your collaboration.'
+    await ctx.send(tmpt)
 
     def checkSex(reaction, user):
         return reaction.message.content == tmpt and user == actual_talking and (str(reaction.emoji) == '🚹' or str(reaction.emoji) == '🚺')
@@ -96,7 +97,8 @@ async def covid_predict(ctx):
     elif str(reaction.emoji) == '🚺':
         data['sex'] = 2
 
-    await ctx.send('Do you practice any sport regularly? Answer with 👍/👎.')
+    tmpt = 'Do you practice any sport regularly? Answer with 👍/👎.'
+    await ctx.send(tmpt)
 
     reaction, user = await bot.wait_for('reaction_add', check=check)
 
@@ -105,7 +107,8 @@ async def covid_predict(ctx):
     elif str(reaction.emoji) == '👎':
         data['sports'] = 2
 
-    await ctx.send('Does anyone smoke at your home? Answer with 👍/👎.')
+    tmpt = 'Does anyone smoke at your home? Answer with 👍/👎.'
+    await ctx.send(tmpt)
 
     reaction, user = await bot.wait_for('reaction_add', check=check)
 
@@ -116,7 +119,8 @@ async def covid_predict(ctx):
 
     data['inclusion_criteria'] = -1
 
-    await ctx.send('Anyone at home with suspected COVID-19 symptoms? Answer with 👍/👎.')
+    tmpt = 'Anyone at home with suspected COVID-19 symptoms? Answer with 👍/👎.'
+    await ctx.send(tmpt)
 
     reaction, user = await bot.wait_for('reaction_add', check=check)
 
@@ -125,7 +129,8 @@ async def covid_predict(ctx):
     elif str(reaction.emoji) == '👎':
         data['symp_epi'] = 0
 
-    await ctx.send('Anyone at School had COVID-19 symptoms? Answer with 👍/👎.')
+    tmpt = 'Anyone at School had COVID-19 symptoms? Answer with 👍/👎.'
+    await ctx.send(tmpt)
 
     reaction, user = await bot.wait_for('reaction_add', check=check)
 
@@ -136,7 +141,8 @@ async def covid_predict(ctx):
         data['school_symptoms_member_1'] = 0
         data['school_symptoms_member_2'] = 0
 
-    await ctx.send('Anyone at School with confirmed COVID-19? Answer with 👍/👎.')
+    tmpt = 'Anyone at School with confirmed COVID-19? Answer with 👍/👎.'
+    await ctx.send(tmpt)
 
     reaction, user = await bot.wait_for('reaction_add', check=check)
 
@@ -145,7 +151,8 @@ async def covid_predict(ctx):
     elif str(reaction.emoji) == '👎':
         data['school_confirmed'] = 0
 
-    await ctx.send('Do you present COVID-19 symptoms? Answer with 👍/👎.')
+    tmpt = 'Do you present COVID-19 symptoms? Answer with 👍/👎.'
+    await ctx.send(tmpt)
 
     reaction, user = await bot.wait_for('reaction_add', check=check)
 
@@ -182,7 +189,8 @@ async def covid_predict(ctx):
 
 #TOTS ELS SIMPTOMAS VAN AQUI
 
-    await ctx.send('Have you taken any antigenic test for other respiratory viruses? Answer with 👍/👎.')
+    tmpt = 'Have you taken any antigenic test for other respiratory viruses? Answer with 👍/👎.'
+    await ctx.send(tmpt)
 
     reaction, user = await bot.wait_for('reaction_add', check=check)
 
@@ -191,7 +199,8 @@ async def covid_predict(ctx):
     #elif str(reaction.emoji) == '👎':
         #NO PREGUNTAR ELS VIRUSES
 
-    await ctx.send('Do you have any bacterial infection? Answer with 👍/👎.')
+    tmpt = 'Do you have any bacterial infection? Answer with 👍/👎.'
+    await ctx.send(tmpt)
 
     reaction, user = await bot.wait_for('reaction_add', check=check)
 
@@ -202,7 +211,8 @@ async def covid_predict(ctx):
 
     data['comorbi_binary'] = 1
 
-    await ctx.send('Do you have obesity? Answer with 👍/👎.')
+    tmpt = 'Do you have obesity? Answer with 👍/👎.'
+    await ctx.send(tmpt)
 
     reaction, user = await bot.wait_for('reaction_add', check=check)
 
@@ -211,7 +221,8 @@ async def covid_predict(ctx):
     elif str(reaction.emoji) == '👎':
         data['obesity'] = 0
 
-    await ctx.send('Seasonal Flu vaccine administered? Answer with 👍/👎.')
+    tmpt = 'Seasonal Flu vaccine administered? Answer with 👍/👎.'
+    await ctx.send(tmpt)
 
     reaction, user = await bot.wait_for('reaction_add', check=check)
 
@@ -220,7 +231,8 @@ async def covid_predict(ctx):
     elif str(reaction.emoji) == '👎':
         data['flu_binary'] = 0
 
-    await ctx.send('Routine vaccines up to date? Answer with 👍/👎.')
+    tmpt = 'Routine vaccines up to date? Answer with 👍/👎.'
+    await ctx.send(tmpt)
 
     reaction, user = await bot.wait_for('reaction_add', check=check)
 
