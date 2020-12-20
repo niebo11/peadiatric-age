@@ -64,8 +64,6 @@ respiratory_symptoms = {'Wheezing(sibilants)': 'wheezing', 'Crackles': 'crackles
 grastrointestinal_symptoms = {'Abdominal pain': 'abdominal_pain', 'Vomiting/Nausees' : 'vomiting',
                               'Diarrhoes': 'dyarrea'}
 
-# TODO skin symptoms
-
 neurologic_symptoms = {'Seizures': 'seizures', 'Hypotonia/flaccidity': 'hypotonia'}
 
 extra_symptoms = {'Respiratory ausculation': respiratory_symptoms,
