@@ -81,9 +81,8 @@ async def me(ctx):
                    " try to help you use the \"!covid\" command. Nice to meet you!")
 
 @bot.command("define", help="Describe the first word given.")
-async def answer(ctx, args):
+async def answer(ctx, arg):
     try:
-        arg = args.split()
         await ctx.send(wiki_summary(arg))
     except wikipedia.exceptions.DisambiguationError as e:
         await ctx.send(str(e))
