@@ -13,8 +13,8 @@ bot = commands.Bot(command_prefix='!')
 
 symptoms_01 = {'wheezing', 'crackles', 'dermatologic', 'rash', 'neuro', 'seizures', 'hypotonia', 'shock',
                'taste_smell', 'smell'}
-
-data = {'sex': 1, 'sports': 2, 'smokers_home': 2, 'inclusion_criteria': 2, 'sympt_epi': 1,
+def init():
+    data = {'sex': 1, 'sports': 2, 'smokers_home': 2, 'inclusion_criteria': 2, 'sympt_epi': 1,
         'school_symptoms_member___1' : 1, 'school_symptoms_member___2': 1, 'school_confirmed': 1,
         'symptoms_binary': 1, 'fever': 2, 'tos': 2, 'crup':2, 'dysphonia':2, 'resp':2, 'tachypnea':2,
         'ausc_resp':2, 'wheezing':2, 'crackles':2, 'odynophagia':2, 'nasal_congestion':2,
@@ -23,8 +23,23 @@ data = {'sex': 1, 'sports': 2, 'smokers_home': 2, 'inclusion_criteria': 2, 'symp
         'hemorrhagies':2, 'irritability':2, 'neuro':1, 'seizures':1, 'hypotonia':1, 'shock':1,
         'taste_smell':1, 'smell':1, 'vrs_result':2, 'flu_a_result':2, 'flu_b_result':2,
         'bacterial_infection':2, 'obesity': 1, 'flu_binary': 1, 'vaccines_binary': 1, 'coviral': 9}
+    return data
+
+def init_disease():
+    data = {'cardiopathy': 2, 'hypertension': 2, 'pulmonar_disease': 2, 'asma': 2, 'nephrology': 2, 'hepatic':2,
+            'neurologic': 2, 'diabetes': 2, 'tuberculosi': 2, 'idp': 2, 'neoplasia': 2, 'kawasaki': 2,
+            'inflammation': 2, 'vih_others': 2}
+    return data
 
 actual_talking = ""
+
+diseases = {'cardiopathy': 'Cardiopathy', 'hypertension': 'Hypertension', 'pulmonar_disease': 'Pulmonar diseases',
+            'asma': 'Asma', 'nephrology': 'Chronic renal disease', 'hepatic': 'Chronic liver disease',
+            'neurologic': 'Chronic neurologic disease', 'diabetes': 'Diabetes', 'tuberculosi': 'Tuberculosis',
+            'idp': 'Primary immunodeficiency', 'neoplasia': 'Onco-haematological diseases',
+            'kawasaki': 'Kawasaki syndrome', 'inflammation': 'Other inflammatory diseases',
+            'vih_others': 'HIV infection or other secondary immunodeficiencies'}
+
 
 symptoms = {'Fever': 'fever', 'Cough': 'tos', 'Croupy cough': 'crup', 'Dysphonia/aphony': 'dysphonia',
             'Shortness of breath or working of breathing':'resp', 'Tachypnea/Polypnea': 'tachypnea',
@@ -59,6 +74,8 @@ async def me(ctx):
 
 @bot.command("covid", help='Nothing Yet')
 async def covid_predict(ctx):
+    data = init()
+    comordibity = False
     actual_talking = ctx.author
     tmpt = 'Now I am going to ask you a few questions and I would try to predict if you are ill :c.\n I am not ' \
            'scientifically accurate so If you don\'t feel well, please go to your nearest hospital as soon as possible.' \
@@ -189,11 +206,6 @@ async def covid_predict(ctx):
 
     reaction, user = await bot.wait_for('reaction_add', check=check)
 
-    #if str(reaction.emoji) == '👍':
-        #PREGUNTAR ELS VIRUSES
-    #elif str(reaction.emoji) == '👎':
-        #NO PREGUNTAR ELS VIRUSES
-
     tmpt = 'Do you have any bacterial infection? Answer with 👍/👎.'
     await ctx.send(tmpt)
 
@@ -234,21 +246,66 @@ async def covid_predict(ctx):
     elif str(reaction.emoji) == '👎':
         data['vaccines_binary'] = 0
 
-    predict_data = pd.DataFrame(data, index = [0])
+    tmpt = 'Do you have any Comorbidities? Answer with 👍/👎.'
+    await ctx.send(tmpt)
 
-    file = open('model_main.pickle', 'rb')
-    model = pickle.load(file)
+    reaction, user = await bot.wait_for('reaction_add', check=check)
 
-    pred = model.predict(predict_data)
-    if pred[0] == '0':
-        await ctx.send('Congratulations! There is a great chance you aren\'t having CoVid-19. In any case, if you '
-                      'start feeling worse, remember to call your CAP or go to the nearest hospital possible. Even if'
-                      ' you are having CoVid-19, remember to wear your mask properly when you go out and wash your hands'
-                      ' frequently!')
+    if str(reaction.emoji) == '👍':
+        comorbidity = True
+
+    if not comorbidity:
+        predict_data = pd.DataFrame(data, index = [0])
+        file = open('model_main.pickle', 'rb')
+        model = pickle.load(file)
+
+        pred = model.predict(predict_data)
+        if pred[0] == '0':
+            await ctx.send('Congratulations! There is a great chance you aren\'t having CoVid-19. In any case, if you '
+                          'start feeling worse, remember to call your CAP or go to the nearest hospital possible. Even if'
+                          ' you are having CoVid-19, remember to wear your mask properly when you go out and wash your hands'
+                          ' frequently!')
+        else:
+            await ctx.send('You have a big chance to have CoVid-19. If you didn\' talk to your doctor yet, please do it '
+                           'as soon as possible. Remember to avoid contact with unnecessary people to make the tracking '
+                           'easier in case you are ill, also you must wear your mask properly when you go out and try to'
+                           ' wash your hands frequently!')
     else:
-        await ctx.send('You have a big chance to have CoVid-19. If you didn\' talk to your doctor yet, please do it '
-                       'as soon as possible. Remember to avoid contact with unnecessary people to make the tracking '
-                       'easier in case you are ill, also you must wear your mask properly when you go out and try to'
-                       ' wash your hands frequently!')
+        tmpt = ('Now we will give you a list of comorbidities, if you suffer from any of them please react with 👍. When'
+                ' you ended, react with 👍 to this message.')
+        await ctx.send(tmpt)
+        disease = init_disease()
+        diseases_inv = {v: k for k, v in diseases.items()}
+
+        for item in diseases_inv:
+            await ctx.send(item)
+        notEnd = True
+        while(notEnd):
+            reaction, user = await bot.wait_for('reaction_add', check=check2)
+
+            if reaction.message.content in diseases_inv:
+                disease[diseases_inv[item]] = 1
+            elif reaction.message.content == tmpt:
+                notEnd = False
+
+        data = {**data, **disease}
+
+        predict_data = pd.DataFrame(data, index = [0])
+
+        file = open('model_1.pickle', 'rb')
+        model = pickle.load(file)
+
+        pred = model.predict(predict_data)
+
+        if pred[0] == '0':
+            await ctx.send('Congratulations! There is a great chance you aren\'t having CoVid-19. In any case, if you '
+                          'start feeling worse, remember to call your CAP or go to the nearest hospital possible. Even if'
+                          ' you are having CoVid-19, remember to wear your mask properly when you go out and wash your hands'
+                          ' frequently!')
+        else:
+            await ctx.send('You have a big chance to have CoVid-19. If you didn\' talk to your doctor yet, please do it '
+                           'as soon as possible. Remember to avoid contact with unnecessary people to make the tracking '
+                           'easier in case you are ill, also you must wear your mask properly when you go out and try to'
+                           ' wash your hands frequently!')
 
 bot.run(TOKEN)
