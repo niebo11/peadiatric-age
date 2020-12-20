@@ -1,51 +1,51 @@
-sex?
-do you practice sports regularly?
-Does anyone at home smoke?
+Gender? R(1/2) = (M/F)
+Do you practice sports regularly? R(1/2)
+Does anyone at home smoke? R(1/2)
 **provar predictor sense el inclusion criteria** assignar -1
-Anyone at home with suspected COVID-19 symptoms?
-Anyone at School had COVID-19 symptoms?
-Anyone at School with confirmed COVID-19?
-Do you present COVID-19 symptoms? **si es qe sí, preguntar els següents, si no, posar qe no a tots**
+Anyone at home with suspected COVID-19 symptoms? R(1/0)
+Anyone at School had COVID-19 symptoms? R(1/0) als dos school_member
+Anyone at School with confirmed COVID-19? R(1/0)
+Do you present COVID-19 symptoms? R(1/0) **si es qe sí, preguntar els següents, si no, posar qe no a tots**
 Which of these symptoms do you present?
-    Fever
-    Cough
-    Croupy cough
-    Dysphonia / aphony
-    Shortness of breath or work of breathing
-    Tachypnea / polypnea
-    Respiratory auscultation **si es que si preguntar tbe el següent, si no assignar no**
-        Wheezing(sibilants)
-        Crackles
-    Odynophagia
-    Nasal congestion
-    Fatigue / Malaise
-    Headache
-    Conjuntivitis
-    Retro-ocular pain
-    Gastrointestinal symptoms **si es que si preguntar tbe el següent, si no assignar no**
-        Abdominal pain
-        Vomiting/nausees
-        Diarrhoea
-    Skin signs / symptoms
-        Skin Rash
-        Inflammatory peripherical signs
-    Lymphadenopathies (>1cm)
-    Hepatomegaly
-    Splenomegaly
-    Hemorrhagies
-    Irritability
-    Neurologic manifestations **si es que si preguntar tbe el següent, si no assignar no**
-        Seizures (convulsions)
-        Hypotonia / flaccidity
-    Shock signs
-    Alteration in taste
-    Alteration in smell
-    Have you taken any antigenic test for other respiratory viruses? **si es que si preguntar tbe el següent, si no assignar desconagut(3)**
-        Antigenic test for RSV (VRS) result
-        Antigenic test for INFLUENZA A result
-        Antigenic test for INFLUENZA B result
-    Do you have any bacterial infection?
-    Do you have comorbidities?
+    Fever R(1/2)
+    Cough R(1/2/3)
+    Croupy cough R(1/2/3)
+    Dysphonia / aphony R(1/2/3)
+    Shortness of breath or work of breathing R(1/2/3)
+    Tachypnea / polypnea R(1/2/3)
+    Respiratory auscultation  R(1/2) **si es que si preguntar tbe el següent, si no assignar no**
+        Wheezing(sibilants) R(1/0)
+        Crackles R(1/0)
+    Odynophagia R(1/2/3)
+    Nasal congestion R(1/2/3)
+    Fatigue / Malaise R(1/2/3)
+    Headache R(1/2/3)
+    Conjuntivitis R(1/2/3)
+    Retro-ocular pain R(1/2/3)
+    Gastrointestinal symptoms R(1/0) **si es que si preguntar tbe el següent, si no assignar no**
+        Abdominal pain R(1/2/3)
+        Vomiting/nausees R(1/2/3)
+        Diarrhoea R(1/2/3)
+    Skin signs / symptoms R(1/0)
+        Skin Rash R(1/0)
+        Inflammatory peripherical signs R(1/0)
+    Lymphadenopathies (>1cm) R(1/2/3)
+    Hepatomegaly R(1/2/3)
+    Splenomegaly R(1/2/3)
+    Hemorrhagies R(1/2/3)
+    Irritability R(1/2/3)
+    Neurologic manifestations R(1/0)**si es que si preguntar tbe el següent, si no assignar no**
+        Seizures (convulsions) R(1/0)
+        Hypotonia / flaccidity R(1/0)
+    Shock signs R(1/0)
+    Alteration in taste R(1/0)
+    Alteration in smell R(1/0)
+    Have you taken any antigenic test for other respiratory viruses? R(1/0) **si es que si preguntar tbe el següent, si no assignar desconagut(3)**
+        Antigenic test for RSV (VRS) result R(1/2/3)
+        Antigenic test for INFLUENZA A result R(1/2/3)
+        Antigenic test for INFLUENZA B result R(1/2/3)
+    Do you have any bacterial infection? R(1/2/3)
+    Do you have comorbidities? R(1/0)
     Do you have obesity (IMC>p30)? R(1/0)
     Seasonal Flu vaccine administered? R(1/0)
     Routine vaccines up to date? R(1/0)
