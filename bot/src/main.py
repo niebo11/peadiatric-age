@@ -78,19 +78,17 @@ async def covid_predict(ctx):
                    'I am not scientifically accurate so If you don\'t feel well, please go to your nearest hospital '
                    'as soon as possible.\n Please answer with 👍 or 👎 reaction, thanks for your collaboration.')
 
-    tmpt = 'Which is your gender? Answer with 🚹 🚺 reaction.'
-
-    await ctx.send(tmpt)
-
     def checkSex(reaction, user):
         return reaction.message.content == tmpt and user == actual_talking and (str(reaction.emoji) == '🚹' or str(reaction.emoji) == '🚺')
 
     def check(reaction, user):
-        return reaction.message.content == tmpt and user == actual_talking
+        return reaction.message.content == tmpt and user == actual_talking and (str(reaction.emoji) == '👍' or str(reaction.emoji) == '👎')
 
     def check2(reaction, user):
         return user == actual_talking and str(reaction.emoji) == '👍'
 
+    tmpt = 'Which is your gender? Answer with 🚹 🚺 reaction.'
+    await ctx.send(tmpt)
     reaction, user = await bot.wait_for('reaction_add', check=checkSex)
 
     if str(reaction.emoji) == '🚹':
@@ -188,9 +186,9 @@ async def covid_predict(ctx):
 
     reaction, user = await bot.wait_for('reaction_add', check=check)
 
-    if str(reaction.emoji) == '👍':
+    #if str(reaction.emoji) == '👍':
         #PREGUNTAR ELS VIRUSES
-    elif str(reaction.emoji) == '👎':
+    #elif str(reaction.emoji) == '👎':
         #NO PREGUNTAR ELS VIRUSES
 
     await ctx.send('Do you have any bacterial infection? Answer with 👍/👎.')
