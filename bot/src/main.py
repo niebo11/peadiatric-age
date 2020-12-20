@@ -11,6 +11,9 @@ bot = commands.Bot(command_prefix='!')
 
 actual_talking = ""
 
+symptoms = {'Fever': 'fever', 'Cough': 'tos', 'Croupy cough': 'crup', 'Dysphonia/aphony': 'dysphonia',
+                'Shortness of breath or working of breathing':'resp', 'Tachypnea/Polypnea': 'tachypnea'}
+
 data = pd.DataFrame(columns = ['sex', 'sports', 'smokers_home', 'inclusion_criteria', 'sympt_epi',
                                'school_symptoms_member_1', 'school_symptoms_member_2', 'school_confirmed',
                                'symptoms_binary', 'fever', 'tos', 'crup', 'dysphonia', 'resp', 'tachypnea',
@@ -30,6 +33,23 @@ async def me(ctx):
                    " other cases I have. For this reason I will ask you some questions about the child, if you want me to"
                    " try to help you use the \"!covid\" command. Nice to meet you!")
 
+    message_tempt = ('For the following symptoms please mark with 👍 the ones you are having or you had.'
+                   ' When you completed the form react to this message with 👍')
+
+    await ctx.send(message_tempt)
+
+    for value in symptoms:
+        await ctx.send(value)
+
+    notEnd = True
+
+    while(notEnd):
+        reaction, user = await bot.wait_for('reaction_add', check=check2)
+
+        if reaction.message == message_tempt:
+            notEnd = False
+        else:
+            data[symptoms[reaction.message]] = 1
 
 @bot.command("covid", help='Nothing Yet')
 async def covid_predict(ctx):
@@ -42,6 +62,9 @@ async def covid_predict(ctx):
 
     def check(reaction, user):
         return user == actual_talking
+
+    def check2(reaction, user):
+        return user == actual_talking and str(reaction.emoji) == '👍'
 
     reaction, user = await bot.wait_for('reaction_add', check=check)
 
