@@ -202,4 +202,6 @@ async def covid_predict(ctx):
     elif str(reaction.emoji) == '👎':
         data['vaccines_binary'] = 0
 
+    data['coviral'] = 9
+
 bot.run(TOKEN)
