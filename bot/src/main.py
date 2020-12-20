@@ -12,7 +12,7 @@ bot = commands.Bot(command_prefix='!')
 actual_talking = ""
 
 data = pd.DataFrame(columns = ['sex', 'sports', 'smokers_home', 'inclusion_criteria', 'sympt_epi',
-                               'school_symptoms_member_1', 'school_symptomsmember2', 'school_confirmed',
+                               'school_symptoms_member_1', 'school_symptoms_member_2', 'school_confirmed',
                                'symptoms_binary', 'fever', 'tos', 'crup', 'dysphonia', 'resp', 'tachypnea',
                                'ausc_resp', 'wheezing', 'crackles', 'odynophagia', 'nasal_congestion',
                                'fatiga', 'headache', 'conjuntivitis', 'ocular_pain', 'gi_symptoms', 'abdominal_pain',
@@ -68,5 +68,44 @@ async def covid_predict(ctx):
     elif str(reaction.emoji) == '👎':
         data['smokers_home'] = 2
 
+    data['inclusion_criteria'] = -1
+
+    await ctx.send('Anyone at home with suspected COVID-19 symptoms? Answer with 👍/👎.')
+
+    reaction, user = await bot.wait_for('reaction_add', check=check)
+
+    if str(reaction.emoji) == '👍':
+        data['symp_epi'] = 1
+    elif str(reaction.emoji) == '👎':
+        data['symp_epi'] = 0
+
+    await ctx.send('Anyone at School had COVID-19 symptoms? Answer with 👍/👎.')
+
+    reaction, user = await bot.wait_for('reaction_add', check=check)
+
+    if str(reaction.emoji) == '👍':
+        data['school_symptoms_member_1'] = 1
+        data['school_symptoms_member_2'] = 1
+    elif str(reaction.emoji) == '👎':
+        data['school_symptoms_member_1'] = 0
+        data['school_symptoms_member_2'] = 0
+
+    await ctx.send('Anyone at School with confirmed COVID-19? Answer with 👍/👎.')
+
+    reaction, user = await bot.wait_for('reaction_add', check=check)
+
+    if str(reaction.emoji) == '👍':
+        data['school_confirmed'] = 1
+    elif str(reaction.emoji) == '👎':
+        data['school_confirmed'] = 0
+
+    await ctx.send('Do you present COVID-19 symptoms? Answer with 👍/👎.')
+
+    reaction, user = await bot.wait_for('reaction_add', check=check)
+
+    if str(reaction.emoji) == '👍':
+        data['symptoms_binary'] = 1
+    elif str(reaction.emoji) == '👎':
+        data['symptoms_binary'] = 0
 
 bot.run(TOKEN)
