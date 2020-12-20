@@ -2,6 +2,7 @@ import os
 import discord
 from dotenv import load_dotenv
 from discord.ext import commands
+import pandas as pd
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -9,6 +10,25 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 bot = commands.Bot(command_prefix='!')
 
 actual_talking = ""
+
+data = pd.DataFrame(columns = ['sex', 'sports', 'smokers_home', 'inclusion_criteria', 'sympt_epi',
+                               'school_symptoms_member_1', 'school_symptomsmember2', 'school_confirmed',
+                               'symptoms_binary', 'fever', 'tos', 'crup', 'dysphonia', 'resp', 'tachypnea',
+                               'ausc_resp', 'wheezing', 'crackles', 'odynophagia', 'nasal_congestion',
+                               'fatiga', 'headache', 'conjuntivitis', 'ocular_pain', 'gi_symptoms', 'abdominal_pain',
+                               'vomiting', 'dyarrea', 'dermatologic', 'rash', 'adenopathies', 'hepato', 'splenomegaly',
+                               'hemorrhagies', 'irritability', 'neuro', 'seizures', 'hypotonia', 'shock',
+                               'taste_smell', 'smell', 'vrs_result', 'flu_a_result', 'flu_b_result',
+                               'bacterial_infection', 'comorbi_binary', 'obesity', 'flu_binary', 'vaccines_binary',
+                               'coviral'])
+
+@bot.command("me", help="Description of the bot")
+async def me(ctx):
+    await ctx.send("Hi, my name is Covid_Bot, I was created by Aleix Sarroca Soler and Niebo Zhang and I am here "
+                   "to helping in everything I can. My most important task is "
+                   "to help parents to detect a possible case of CoVid-19 in their children by comparing different"
+                   " other cases I have. For this reason I will ask you some questions about the child, if you want me to"
+                   " try to help you use the \"!covid\" command. Nice to meet you!")
 
 
 @bot.command("covid", help='Nothing Yet')
@@ -18,19 +38,35 @@ async def covid_predict(ctx):
                    'I am not scientifically accurate so If you don\'t feel well, please go to your nearest hospital '
                    'as soon as possible.\n Please answer with 👍 or 👎 reaction, thanks for your collaboration.')
 
-    await ctx.send('Do you have testicles?')
+    await ctx.send('Which is your gender? Answer with :mens: :womens: reaction.')
 
     def check(reaction, user):
         return user == actual_talking
 
     reaction, user = await bot.wait_for('reaction_add', check=check)
 
-    if str(reaction.emoji) == '👎':
-        await ctx.send('Congratulation! You are not a stupid men.')
-    else:
-        await ctx.send('Did you know that men die more from COVID-19?')
+    if str(reaction.emoji) == ':mens:':
+        data['sex'] = 1
+    elif str(reaction.emoji) == ':womens:':
+        data['sex'] = 2
 
-    print(reaction)
+    await ctx.send('Do you practice any sport regularly? Answer with 👍/👎.')
+
+    reaction, user = await bot.wait_for('reaction_add', check=check)
+
+    if str(reaction.emoji) == '👍':
+        data['sports'] = 1
+    elif str(reaction.emoji) == '👎':
+        data['sports'] = 2
+
+    await ctx.send('Does anyone smoke at your home? Answer with 👍/👎.')
+
+    reaction, user = await bot.wait_for('reaction_add', check=check)
+
+    if str(reaction.emoji) == '👍':
+        data['smokers_home'] = 1
+    elif str(reaction.emoji) == '👎':
+        data['smokers_home'] = 2
 
 
 bot.run(TOKEN)
