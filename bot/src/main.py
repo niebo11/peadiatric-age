@@ -267,15 +267,15 @@ async def covid_predict(ctx):
     reaction, user = await bot.wait_for('reaction_add', check=check)
 
     if str(reaction.emoji) == '👍':
-        comorbidity = True
+        comordibity = True
 
-    if not comorbidity:
+    if not comordibity:
         predict_data = pd.DataFrame(data, index = [0])
         file = open('model_main.pickle', 'rb')
         model = pickle.load(file)
 
         pred = model.predict(predict_data)
-        if pred[0] == '0':
+        if pred[0] == 1:
             await ctx.send('Congratulations! There is a great chance you aren\'t having CoVid-19. In any case, if you '
                           'start feeling worse, remember to call your CAP or go to the nearest hospital possible. Even if'
                           ' you are not having CoVid-19, remember to wear your mask properly when you go out and wash your hands'
@@ -285,6 +285,7 @@ async def covid_predict(ctx):
                            'as soon as possible. Remember to avoid contact with unnecessary people to make the tracking '
                            'easier in case you are ill, also you must wear your mask properly when you go out and try to'
                            ' wash your hands frequently!')
+
     else:
         tmpt = ('Now we will give you a list of comorbidities, if you suffer from any of them please react with 👍. When'
                 ' you ended, react with 👍 to this message.')
@@ -312,7 +313,7 @@ async def covid_predict(ctx):
 
         pred = model.predict(predict_data)
 
-        if pred[0] == '0':
+        if pred[0] == 1:
             await ctx.send('Congratulations! There is a great chance you aren\'t having CoVid-19. In any case, if you '
                           'start feeling worse, remember to call your CAP or go to the nearest hospital possible. Even if'
                           ' you are not having CoVid-19, remember to wear your mask properly when you go out and wash your hands'
