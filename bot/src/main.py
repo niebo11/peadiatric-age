@@ -17,7 +17,22 @@ symptoms = {'Fever': 'fever', 'Cough': 'tos', 'Croupy cough': 'crup', 'Dysphonia
             'Nasal congestion': 'nasal_congestion', 'Fatigue/Malaise':'fatiga', 'Headache':'headache',
             'Conjuntivitis': 'conjuntivitis', 'Retro-ocular pain': 'ocular_pain',
             'Gastrointestinal symptoms':'gi_symptoms', 'Skin signs/ symptoms' : 'dermatologic',
-            'Lymphadenopathies': 'adenophaties'}
+            'Lymphadenopathies': 'adenophaties', 'Hepatomegaly': 'hepato', 'Splenomegaly': 'splenomegaly',
+            'Hemorrhagies': 'hemorrhagies', 'Irritability': 'irritability', 'Neurologic manifestations': 'neuro',
+            'Shock signs': 'shock', 'Alteration in taste':'taste_smell', 'Alteration in smell': 'smell'}
+
+respiratory_symptoms = {'Wheezing(sibilants)': 'wheezing', 'Crackles': 'crackles'}
+
+grastrointestinal_symptoms = {'Abdominal pain': 'abdominal_pain', 'Vomiting/Nausees' : 'vomiting',
+                              'Diarrhoes': 'dyarrea'}
+
+# TODO skin symptoms
+
+neurologic_symptoms = {'Seizures': 'seizures', 'Hypotonia/flaccidity': 'hypotonia'}
+
+extra_symptoms = {'Respiratory ausculation': respiratory_symptoms,
+                  'Gastrointestinal symptoms': grastrointestinal_symptoms,
+                  'Neurologic manifestations': neurologic_symptoms}
 
 data = pd.DataFrame(columns = ['sex', 'sports', 'smokers_home', 'inclusion_criteria', 'sympt_epi',
                                'school_symptoms_member_1', 'school_symptoms_member_2', 'school_confirmed',
@@ -63,19 +78,24 @@ async def covid_predict(ctx):
                    'I am not scientifically accurate so If you don\'t feel well, please go to your nearest hospital '
                    'as soon as possible.\n Please answer with 👍 or 👎 reaction, thanks for your collaboration.')
 
-    await ctx.send('Which is your gender? Answer with :mens: :womens: reaction.')
+    tmpt = 'Which is your gender? Answer with 🚹 🚺 reaction.'
+
+    await ctx.send(tmpt)
+
+    def checkSex(reaction, user):
+        return reaction.message.content == tmpt and user == actual_talking and (str(reaction.emoji) == '🚹' or str(reaction.emoji) == '🚺')
 
     def check(reaction, user):
-        return user == actual_talking
+        return reaction.message.content == tmpt and user == actual_talking
 
     def check2(reaction, user):
         return user == actual_talking and str(reaction.emoji) == '👍'
 
-    reaction, user = await bot.wait_for('reaction_add', check=check)
+    reaction, user = await bot.wait_for('reaction_add', check=checkSex)
 
-    if str(reaction.emoji) == ':mens:':
+    if str(reaction.emoji) == '🚹':
         data['sex'] = 1
-    elif str(reaction.emoji) == ':womens:':
+    elif str(reaction.emoji) == '🚺':
         data['sex'] = 2
 
     await ctx.send('Do you practice any sport regularly? Answer with 👍/👎.')
@@ -146,11 +166,20 @@ async def covid_predict(ctx):
     notEnd = False
     while(notEnd):
         reaction, user = await bot.wait_for('reaction_add', check=check2)
-        if reaction.message == message_aux:
+        if reaction.message.content == message_aux:
             notEnd = True
         else:
-            data[symptoms[symptoms]] = 1
+            if reaction.message.content in extra_symptoms:
+                print('entra')
+                for item in extra_symptoms[reaction.message.content]:
+                    tmpt = ('Do you have ' + item + ' symptom. React with 👍/👎')
+                    await ctx.send(tmpt)
+                    reaction, user = await bot.wait_for('reaction_add', check=check)
+                    if str(reaction.emoji) == '👍':
+                        data['symptoms_binary'] = 1
 
-    print(data)
+                await ctx.send('Keep reacting to your symptoms. Remember to react with 👍 if you finished.')
+
+            data[symptoms[reaction.message.content]] = 1
 
 bot.run(TOKEN)
