@@ -75,15 +75,14 @@ extra_symptoms = {'Respiratory ausculation': respiratory_symptoms,
 @bot.command("me", help="Description of the bot")
 async def me(ctx):
     await ctx.send("Hi, my name is Covid_Bot, I was created by Aleix Sarroca Soler and Niebo Zhang and I am here "
-                   "to helping in everything I can. My most important task is "
+                   "to help you in everything I can. My most important task is "
                    "to help parents to detect a possible case of CoVid-19 in their children by comparing different"
                    " other cases I have. For this reason I will ask you some questions about the child, if you want me to"
                    " try to help you use the \"!covid\" command. Nice to meet you!")
 
 @bot.command("define", help="Describe the first word given.")
-async def answer(ctx, args):
+async def answer(ctx, arg):
     try:
-        arg = args.split()
         await ctx.send(wiki_summary(arg))
     except wikipedia.exceptions.DisambiguationError as e:
         await ctx.send(str(e))
