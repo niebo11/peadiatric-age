@@ -12,7 +12,12 @@ bot = commands.Bot(command_prefix='!')
 actual_talking = ""
 
 symptoms = {'Fever': 'fever', 'Cough': 'tos', 'Croupy cough': 'crup', 'Dysphonia/aphony': 'dysphonia',
-                'Shortness of breath or working of breathing':'resp', 'Tachypnea/Polypnea': 'tachypnea'}
+            'Shortness of breath or working of breathing':'resp', 'Tachypnea/Polypnea': 'tachypnea',
+            'Respiratory ausculation': 'ausc_resp', 'Odynophagia': 'odynophagia',
+            'Nasal congestion': 'nasal_congestion', 'Fatigue/Malaise':'fatiga', 'Headache':'headache',
+            'Conjuntivitis': 'conjuntivitis', 'Retro-ocular pain': 'ocular_pain',
+            'Gastrointestinal symptoms':'gi_symptoms', 'Skin signs/ symptoms' : 'dermatologic',
+            'Lymphadenopathies': 'adenophaties'}
 
 data = pd.DataFrame(columns = ['sex', 'sports', 'smokers_home', 'inclusion_criteria', 'sympt_epi',
                                'school_symptoms_member_1', 'school_symptoms_member_2', 'school_confirmed',
@@ -130,5 +135,22 @@ async def covid_predict(ctx):
         data['symptoms_binary'] = 1
     elif str(reaction.emoji) == '👎':
         data['symptoms_binary'] = 0
+
+    message_aux = ('Which of these symptoms do you present? Mark them with the 👍 reaction. When you have ended'
+                   ' react to this message with 👍.')
+    await ctx.send(message_aux)
+
+    for symptom in symptoms:
+        await ctx.send(symptom)
+
+    notEnd = False
+    while(notEnd):
+        reaction, user = await bot.wait_for('reaction_add', check=check2)
+        if reaction.message == message_aux:
+            notEnd = True
+        else:
+            data[symptoms[symptoms]] = 1
+
+    print(data)
 
 bot.run(TOKEN)
