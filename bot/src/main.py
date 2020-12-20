@@ -31,6 +31,10 @@ def init_disease():
             'inflammation': 2, 'vih_others': 2}
     return data
 
+def wiki_summary(arg):
+    definition = wikipedia.summary(arg, sentences=1, chars=100, auto_suggest=True, redirect = True)
+    return definition
+
 actual_talking = ""
 
 diseases = {'cardiopathy': 'Cardiopathy', 'hypertension': 'Hypertension', 'pulmonar_disease': 'Pulmonar diseases',
@@ -300,7 +304,7 @@ async def covid_predict(ctx):
         if pred[0] == '0':
             await ctx.send('Congratulations! There is a great chance you aren\'t having CoVid-19. In any case, if you '
                           'start feeling worse, remember to call your CAP or go to the nearest hospital possible. Even if'
-                          ' you are having CoVid-19, remember to wear your mask properly when you go out and wash your hands'
+                          ' you are not having CoVid-19, remember to wear your mask properly when you go out and wash your hands'
                           ' frequently!')
         else:
             await ctx.send('You have a big chance to have CoVid-19. If you didn\' talk to your doctor yet, please do it '
