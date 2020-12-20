@@ -263,10 +263,10 @@ async def covid_predict(ctx):
         if pred[0] == '0':
             await ctx.send('Congratulations! There is a great chance you aren\'t having CoVid-19. In any case, if you '
                           'start feeling worse, remember to call your CAP or go to the nearest hospital possible. Even if'
-                          ' you are having CoVid-19, remember to wear your mask properly when you go out and wash your hands'
+                          ' you are not having CoVid-19, remember to wear your mask properly when you go out and wash your hands'
                           ' frequently!')
         else:
-            await ctx.send('You have a big chance to have CoVid-19. If you didn\' talk to your doctor yet, please do it '
+            await ctx.send('You have a big chance to have CoVid-19. If you didn\'t talk to your doctor yet, please do it '
                            'as soon as possible. Remember to avoid contact with unnecessary people to make the tracking '
                            'easier in case you are ill, also you must wear your mask properly when you go out and try to'
                            ' wash your hands frequently!')
@@ -300,10 +300,10 @@ async def covid_predict(ctx):
         if pred[0] == '0':
             await ctx.send('Congratulations! There is a great chance you aren\'t having CoVid-19. In any case, if you '
                           'start feeling worse, remember to call your CAP or go to the nearest hospital possible. Even if'
-                          ' you are having CoVid-19, remember to wear your mask properly when you go out and wash your hands'
+                          ' you are not having CoVid-19, remember to wear your mask properly when you go out and wash your hands'
                           ' frequently!')
         else:
-            await ctx.send('You have a big chance to have CoVid-19. If you didn\' talk to your doctor yet, please do it '
+            await ctx.send('You have a big chance to have CoVid-19. If you didn\'t talk to your doctor yet, please do it '
                            'as soon as possible. Remember to avoid contact with unnecessary people to make the tracking '
                            'easier in case you are ill, also you must wear your mask properly when you go out and try to'
                            ' wash your hands frequently!')
