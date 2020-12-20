@@ -182,4 +182,55 @@ async def covid_predict(ctx):
 
             data[symptoms[reaction.message.content]] = 1
 
+#TOTS ELS SIMPTOMAS VAN AQUI
+
+    await ctx.send('Have you taken any antigenic test for other respiratory viruses? Answer with 👍/👎.')
+
+    reaction, user = await bot.wait_for('reaction_add', check=check)
+
+    if str(reaction.emoji) == '👍':
+        #PREGUNTAR ELS VIRUSES
+    elif str(reaction.emoji) == '👎':
+        #NO PREGUNTAR ELS VIRUSES
+
+    await ctx.send('Do you have any bacterial infection? Answer with 👍/👎.')
+
+    reaction, user = await bot.wait_for('reaction_add', check=check)
+
+    if str(reaction.emoji) == '👍':
+        data['bacterial_infection'] = 1
+    elif str(reaction.emoji) == '👎':
+        data['bacterial_infection'] = 2
+
+    data['comorbi_binary'] = 1
+
+    await ctx.send('Do you have obesity? Answer with 👍/👎.')
+
+    reaction, user = await bot.wait_for('reaction_add', check=check)
+
+    if str(reaction.emoji) == '👍':
+        data['obesity'] = 1
+    elif str(reaction.emoji) == '👎':
+        data['obesity'] = 0
+
+    await ctx.send('Seasonal Flu vaccine administered? Answer with 👍/👎.')
+
+    reaction, user = await bot.wait_for('reaction_add', check=check)
+
+    if str(reaction.emoji) == '👍':
+        data['flu_binary'] = 1
+    elif str(reaction.emoji) == '👎':
+        data['flu_binary'] = 0
+
+    await ctx.send('Routine vaccines up to date? Answer with 👍/👎.')
+
+    reaction, user = await bot.wait_for('reaction_add', check=check)
+
+    if str(reaction.emoji) == '👍':
+        data['vaccines_binary'] = 1
+    elif str(reaction.emoji) == '👎':
+        data['vaccines_binary'] = 0
+
+    data['coviral'] = 9
+
 bot.run(TOKEN)
