@@ -5,6 +5,7 @@ from discord.ext import commands
 import pickle
 import pandas as pd
 import sklearn
+import wikipedia
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -13,6 +14,9 @@ bot = commands.Bot(command_prefix='!')
 
 symptoms_01 = {'wheezing', 'crackles', 'dermatologic', 'rash', 'neuro', 'seizures', 'hypotonia', 'shock',
                'taste_smell', 'smell'}
+
+wikipedia.set_lang("en")
+
 def init():
     data = {'sex': 1, 'sports': 2, 'smokers_home': 2, 'inclusion_criteria': 2, 'sympt_epi': 1,
         'school_symptoms_member___1' : 1, 'school_symptoms_member___2': 1, 'school_confirmed': 1,
@@ -76,7 +80,17 @@ async def me(ctx):
                    " other cases I have. For this reason I will ask you some questions about the child, if you want me to"
                    " try to help you use the \"!covid\" command. Nice to meet you!")
 
-@bot.command("covid", help='Nothing Yet')
+@bot.command("define", help="Describe the first word given.")
+async def answer(ctx, args):
+    try:
+        arg = args.split()
+        await ctx.send(wiki_summary(arg))
+    except wikipedia.exceptions.DisambiguationError as e:
+        await ctx.send(str(e))
+        await ctx.send('+' * 60)
+        await ctx.send('DisambiguationError: The page name is ambiguous')
+
+@bot.command("covid", help='The bot predict the possibility of CoVid-19 from simple questions.')
 async def covid_predict(ctx):
     data = init()
     comordibity = False
